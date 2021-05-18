@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Header from "./components/Header";
 import InputForm from "./components/InputForm";
 import Resume from "./components/Resume";
+import Result from "./components/Result";
+import Spiner from "./components/Spiner";
 
 import styled from "@emotion/styled";
 
@@ -17,22 +19,32 @@ const WrapperForm = styled.div`
 
 function App() {
   const [resume, setResume] = useState({
-    quotation: '',
+    quotation: 0,
     data: {
       brand: "",
       year: "",
       plan: "",
-    }
+    },
   });
 
-  const { data } = resume
+  const [loading, setLoading] = useState(false);
+
+  // destructuring data
+  const { quotation, data } = resume;
 
   return (
     <Wrapper>
       <Header title="Insurance Quote" />
       <WrapperForm>
-        <InputForm setResume={setResume} />
-        <Resume data={data} />
+        <InputForm setResume={setResume} setLoading={setLoading} />
+        {loading ? (
+          <Spiner />
+        ) : (
+          <>
+            <Resume data={data} />
+            <Result quotation={quotation} />
+          </>
+        )}
       </WrapperForm>
     </Wrapper>
   );

@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { capitalLetter } from "./helper"
+import PropTypes from 'prop-types';
 
 const WrapperResume = styled.div`
   padding: 1rem;
@@ -18,12 +20,17 @@ const Resume = ({ data }) => {
     <WrapperResume>
       <h2>Quotation Resume</h2>
       <ul>
-        <li>Brand: {brand}</li>
-        <li>year: {year}</li>
-        <li>plan: {plan}</li>
+        <li>Brand: {capitalLetter(brand)}</li>
+        <li>Year: {year}</li>
+        <li>Plan: {capitalLetter(plan)}</li>
       </ul>
     </WrapperResume>
   );
 };
+
+Resume.prototype = {
+  data: PropTypes.object.isRequired
+}
+
 
 export default Resume;

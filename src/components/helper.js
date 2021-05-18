@@ -27,3 +27,9 @@ export function calculateBrand(brand) {
 
 // calculate the total by plan
 export const calculatePlan = (plan) => (plan === "Basic" ? 1.2 : 1.5);
+
+
+// show first capital letter
+export function capitalLetter(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}

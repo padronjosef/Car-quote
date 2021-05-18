@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { yearDifference, calculateBrand, calculatePlan } from './helper'
+import PropTypes from 'prop-types';
+import { yearDifference, calculateBrand, calculatePlan } from "./helper";
 
 const Field = styled.div`
   display: flex;
@@ -49,9 +50,9 @@ const Error = styled.div`
   width: 100%;
   text-align: center;
   margin-bottom: 2rem;
-`
+`;
 
-const Header = ({ setResume }) => {
+const InputForm = ({ setResume, setLoading }) => {
   const [data, setSata] = useState({
     brand: "",
     year: "",
@@ -85,35 +86,44 @@ const Header = ({ setResume }) => {
     let result = 2000;
 
     // get the difference of years
-    const difference = yearDifference(year)
+    const difference = yearDifference(year);
 
     // for each year you have to subtract 3%
-    result -= ((difference * 3) * result) / 100;
+    result -= (difference * 3 * result) / 100;
 
     // Asian 5%, American 15%, European 30%
-    result = calculateBrand(brand) * result
+    result = calculateBrand(brand) * result;
 
     // basic increases 20% and premium 50%
-    const incrementPlan = calculatePlan(plan)
-    result = parseFloat( incrementPlan * result ).toFixed(2);
+    const incrementPlan = calculatePlan(plan);
+    result = parseInt(incrementPlan * result).toFixed(2);
 
-    // total Price
-    setResume({
-      quotation: result,
-      data
-    })
+    // add spiner
+    setLoading(true);
+
+    // emulating api call
+    setTimeout(() => {
+      // remove spiner
+      setLoading(false);
+
+      // set info to the principal component
+      setResume({
+        quotation: Number(result),
+        data,
+      });
+    }, 1000);
   };
 
   return (
     <form onSubmit={handleSumbit}>
-      {error ? <Error>All the fields are required</Error> :null}
+      {error ? <Error>All the fields are required</Error> : null}
       <Field>
         <Label>Brand</Label>
         <Select name="brand" value={brand} onChange={getInfo}>
           <option value="">-- Select One --</option>
           <option value="Asian">Asian</option>
           <option value="American">American</option>
-          <option value="Auropean">European</option>
+          <option value="European">European</option>
         </Select>
       </Field>
       <Field>
@@ -157,4 +167,9 @@ const Header = ({ setResume }) => {
   );
 };
 
-export default Header;
+InputForm.propTypes = {
+  setResume: PropTypes.func.isRequired,
+  setLoading: PropTypes.func.isRequired,
+}
+
+export default InputForm;
